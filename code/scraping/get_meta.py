@@ -69,13 +69,18 @@ class GetMeta(object):
 
 
 def main():
-    DB_NAME = 'yelp2'
+    DB_NAME = 'yelpNY'
     TABLE_NAME = 'restaurant'
 
-    KEY = "FnyzM_idXpBcHLaEwQArgA"
-    SECRET_KEY = "u57LDQDWYjf6rEfrWnQZ1T5wc0Q"
-    TOKEN = "I9ZtcBw249hiqSSNqzFjK5iQcES4YlN_"
-    SECRET_TOKEN = "tCFZujoNsvfK44O4XIFefXFVRsU"
+    # KEY = "FnyzM_idXpBcHLaEwQArgA"
+    # SECRET_KEY = "u57LDQDWYjf6rEfrWnQZ1T5wc0Q"
+    # TOKEN = "I9ZtcBw249hiqSSNqzFjK5iQcES4YlN_"
+    # SECRET_TOKEN = "tCFZujoNsvfK44O4XIFefXFVRsU"
+
+    KEY = "YtYo3-wypceY7A63JaJPAw"
+    SECRET_KEY = "xLX6MySk_gFK3cGI_FzwethvqDU"
+    TOKEN = "BdQOXSrzwX6SO6vuAuzHLCUNOmGEMxCj"
+    SECRET_TOKEN = "1Xcrnf4VVGWQYk-bOWGacaipNtc"
     
     categories = []
     with open('restaurants.txt') as f:
@@ -84,8 +89,8 @@ def main():
             temp = temp[0].split("(")
             categories.append(temp[-1])
     # 'term': 'restaurants',
-    for category in categories[4:5]:
-        PARAMS = {'location': 'San+Francisco',
+    for category in categories:
+        PARAMS = {'location': 'New+York',
                   'term': 'restaurants',
                   'category_filter': category,
                   'limit': 20,
