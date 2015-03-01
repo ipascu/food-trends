@@ -15,12 +15,12 @@ def request(url_params, consumer_key, consumer_secret, token, token_secret):
   encoded_params = ''
   if url_params:
     encoded_params = urllib.urlencode(url_params)
-  url = 'http://%s%s?%s' % (host, path, encoded_params)
+  url = 'http://%s%s?' % (host, path)
   print 'URL: %s' % (url,)
 
   # Sign the URL
   consumer = oauth2.Consumer(consumer_key, consumer_secret)
-  oauth_request = oauth2.Request('GET', url, {})
+  oauth_request = oauth2.Request('GET', url=url, parameters=url_params)
   oauth_request.update({'oauth_nonce': oauth2.generate_nonce(),
                         'oauth_timestamp': oauth2.generate_timestamp(),
                         'oauth_token': token,
