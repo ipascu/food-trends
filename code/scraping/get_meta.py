@@ -44,12 +44,22 @@ class GetMeta(object):
             print "In collection already"
 
     def run(self):
+<<<<<<< HEAD
         try:
             response = self.make_request()
             # The number of total results returned
             total_num = response['total']
             print 'Total number of entries for the query', total_num
             # can only increase offset to 1000        
+=======
+
+        # The number of total results returned
+        try:
+            response = self.make_request()
+            total_num = response['total']
+            print 'Total number of entries for the query', total_num
+        
+>>>>>>> 175217a31254aeaaeacb96d99dee05554cf25f89
             while self.params['offset'] < total_num:
                 response = self.make_request()
                 try:
@@ -60,7 +70,11 @@ class GetMeta(object):
                     print self.params['category_filter']
                     print response
                 self.params['offset'] += 20
+<<<<<<< HEAD
                 time.sleep(0.5)
+=======
+                time.sleep(1)
+>>>>>>> 175217a31254aeaaeacb96d99dee05554cf25f89
         except:
             print response, self.params['category_filter']
         # The existing number of results
@@ -68,24 +82,43 @@ class GetMeta(object):
 
 
 def main():
-    DB_NAME = 'yelp'
+    DB_NAME = 'yelpNY'
     TABLE_NAME = 'restaurant'
 
+<<<<<<< HEAD
     # KEY = ""
     # SECRET_KEY = ""
     # TOKEN = ""
     # SECRET_TOKEN = ""
 
+=======
+    # KEY = "FnyzM_idXpBcHLaEwQArgA"
+    # SECRET_KEY = "u57LDQDWYjf6rEfrWnQZ1T5wc0Q"
+    # TOKEN = "I9ZtcBw249hiqSSNqzFjK5iQcES4YlN_"
+    # SECRET_TOKEN = "tCFZujoNsvfK44O4XIFefXFVRsU"
+
+    KEY = "YtYo3-wypceY7A63JaJPAw"
+    SECRET_KEY = "xLX6MySk_gFK3cGI_FzwethvqDU"
+    TOKEN = "BdQOXSrzwX6SO6vuAuzHLCUNOmGEMxCj"
+    SECRET_TOKEN = "1Xcrnf4VVGWQYk-bOWGacaipNtc"
+    
+>>>>>>> 175217a31254aeaaeacb96d99dee05554cf25f89
     categories = []
     with open('restaurants.txt') as f:
         for line in f:
             temp = line.split(",")
             temp = temp[0].split("(")
             categories.append(temp[-1])
+<<<<<<< HEAD
 
     # searching by category to get fewer than 1000 results
     for category in categories:
         PARAMS = {'location': 'San+Francisco',
+=======
+    # 'term': 'restaurants',
+    for category in categories:
+        PARAMS = {'location': 'New+York',
+>>>>>>> 175217a31254aeaaeacb96d99dee05554cf25f89
                   'term': 'restaurants',
                   'category_filter': category,
                   'limit': 20,
