@@ -1,4 +1,4 @@
-import yelp.search as yelp
+import search as yelp
 from pymongo import MongoClient
 from pymongo import errors
 import time
@@ -44,41 +44,58 @@ class GetMeta(object):
             print "In collection already"
 
     def run(self):
-
-        # The number of total results returned
-        total_num = self.make_request()['total']
-        print 'Total number of entries for the query', total_num
-
-        # The existing number of results
-        total_results = self.table.find().count()
-
-        while total_results < total_num and self.params['offset'] < total_num:
+        try:
             response = self.make_request()
+            # The number of total results returned
+            total_num = response['total']
+            print 'Total number of entries for the query', total_num
+            # can only increase offset to 1000        
+            while self.params['offset'] < total_num:
+                response = self.make_request()
+                try:
+                    for business in response['businesses']:
+                        self.insert_business(business)
+                except:
+                    print 'TOO MANY RESTAURANTS IN CATEGORY:'
+                    print self.params['category_filter']
+                    print response
+                self.params['offset'] += 20
+                time.sleep(0.5)
+        except:
+            print response, self.params['category_filter']
+        # The existing number of results
+        #total_results = self.table.find().count()
 
-            for business in response['businesses']:
-                self.insert_business(business)
-
-            self.params['offset'] += 20
-            time.sleep(1)
 
 def main():
     DB_NAME = 'yelp'
     TABLE_NAME = 'restaurant'
 
-    KEY = "FnyzM_idXpBcHLaEwQArgA"
-    SECRET_KEY = "u57LDQDWYjf6rEfrWnQZ1T5wc0Q"
-    TOKEN = "I9ZtcBw249hiqSSNqzFjK5iQcES4YlN_"
-    SECRET_TOKEN = "tCFZujoNsvfK44O4XIFefXFVRsU"
+    # KEY = ""
+    # SECRET_KEY = ""
+    # TOKEN = ""
+    # SECRET_TOKEN = ""
 
-    PARAMS = {'location': 'San Francisco',
-              'term': 'restaurants',
-              'limit': 20,
-              'offset': 0}
+    categories = []
+    with open('restaurants.txt') as f:
+        for line in f:
+            temp = line.split(",")
+            temp = temp[0].split("(")
+            categories.append(temp[-1])
 
-    yelp_meta = GetMeta(DB_NAME, TABLE_NAME,
-                        KEY, SECRET_KEY, TOKEN,
-                        SECRET_TOKEN, PARAMS)
-    yelp_meta.run()
+    # searching by category to get fewer than 1000 results
+    for category in categories:
+        PARAMS = {'location': 'San+Francisco',
+                  'term': 'restaurants',
+                  'category_filter': category,
+                  'limit': 20,
+                  'offset': 0}
+
+        yelp_meta = GetMeta(DB_NAME, TABLE_NAME,
+                            KEY, SECRET_KEY, TOKEN,
+                            SECRET_TOKEN, PARAMS)
+        yelp_meta.run()
+                        
 
 if __name__ == '__main__':
     main()
