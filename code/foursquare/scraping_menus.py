@@ -1,10 +1,7 @@
 import foursquare
 from pymongo import MongoClient
 from pymongo import errors
-from bs4 import BeautifulSoup
 import time
-import pandas as pd
-import math
 
 mongoclient = MongoClient()
 
@@ -50,7 +47,7 @@ class GetFoursquare(object):
         if not self.table.find_one({"id": venue["id"]}):
             for field, val in venue.iteritems():
                 if type(val) == str:
-                    venue[field] = val.encode('utf-8')
+                    venue[field] = val.encode('utf-8', 'ignore')
             try:
                 print "Inserting restaurant " + venue["name"]
                 self.table.insert(venue)
@@ -62,6 +59,11 @@ class GetFoursquare(object):
             print "In collection already"
 
     def get_menu_info(self):
+        """
+        Find the restaurants in the foursquare database for which hasMenu is true, but 
+        they do not yet have menu data stored from the API. Call the venues.menu API with 
+        these restaurant ids.
+        """
         to_process = self.table.find({'$and': [{'hasMenu':True}, {'menus.count':{'$exists':0}}]})
         counter = 0
         for venue in to_process:
@@ -75,7 +77,7 @@ class GetFoursquare(object):
                 time.sleep(1500)
 
     def populate_venues(self, location_list):
-        ''' use a location list to query foursquare and populate a MongoDB '''
+        ''' use a location list to query foursquare and populate a MongoDB database '''
         for loc in location_list[11::15]:
             self.make_params(ll=loc, radius=400, intent='browse', query='restaurant')
             self.run_search()
