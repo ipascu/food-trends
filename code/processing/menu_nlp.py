@@ -11,6 +11,10 @@ import os.path
 import numpy as np
 
 def create_menu_corpus(filename):
+    '''
+    Extracts menu data from the foursquare mongoDB to create a corpus.
+    Each document is a concatenation of all the words on the menu.
+    '''
     mongoclient = MongoClient()
     coll = mongoclient.foursquare.venues
 
@@ -50,30 +54,63 @@ def get_top_values(lst, n, labels):
     '''
     return [labels[i] for i in np.argsort(lst)[-1:-n-1:-1]]
 
-if __name__ == '__main__':
-    filename = '../pickles/menu_corpus.pkl'
-    if not os.path.isfile(filename):
-        create_menu_corpus(filename)
+def basic_nmf(X, n_topics=20):
+    '''
+    Performs NMF on the TF-IDF feature matrix from menus to create a topic model.
 
-    with open(filename) as f:
+    INPUT: 2d numpy array - X (size = n_docs*n_tf_idf_features)
+    OUTPUT: 2d numpy array - W (Article-Topic weights)
+            2d numpy array - H (Topic-Term weights)
+    '''
+    nmf = NMF(n_components=n_topics)
+    W = nmf.fit_transform(X)
+    H = nmf.components_
+    return W, H
+
+def topic_words(words, H, n_top_words=20):
+    '''
+    INPUT: words from the vectorizer, H topic-term weights, number of top words
+    OUTPUT: dict - most important terms for each topic, with the weights
+            use this for word clouds
+    '''
+    topics_dicts = []
+    n_topics = H.shape[0]
+    for i in xrange(n_topics):
+        k, v = zip(*sorted(zip(words, H[i]),
+                           key=lambda x: x[1])[:-n_top_words:-1])
+        val_arr = np.array(v)
+        norms = val_arr / np.sum(val_arr)
+        topics_dicts.append(dict(zip(k, norms * 100)))
+    return topics_dicts
+    
+
+if __name__ == '__main__':
+    corpus_pkl_file = '../pickles/menu_corpus.pkl'
+    vect_pkl_file = '../pickles/vect.pkl'
+    H_pkl_file = '../pickles/H.pkl'
+
+    if not os.path.isfile(corpus_pkl_file):
+        create_menu_corpus(corpus_pkl_file)
+    with open(corpus_pkl_file) as f:
         corpus = pkl.load(f)
 
     n_topics = 75
-    n_features = 7500
+    n_features = 10000
     vect = TfidfVectorizer(stop_words='english', ngram_range=(1,3), 
         max_df=0.4, max_features=n_features)
-    nmf = NMF(n_components=n_topics)
-
+    print 'building the vectorizer...'
     tfidf = vect.fit_transform(corpus)
-    W = nmf.fit_transform(tfidf)
-    H = nmf.components_
+    feature_words = vect.get_feature_names()    
+    W, H = basic_nmf(tfidf, n_topics=n_topics)
 
-    feature_words = vect.get_feature_names()
+    with open(vect_pkl_file, 'w') as f:
+        pkl.dump(vect, f)
 
-    with open('output.txt', 'w') as f:
-        for i in xrange(H.shape[0]):
-            f.write('\nTopic %d' %i)
-            f.write('%s' % [feature_words[j] for j in np.argsort(H[i,:])[:-15:-1]])
+    with open(H_pkl_file, 'w') as f:
+        pkl.dump(H, f)
+
+    topic_words = topic_words(feature_words, H, n_top_words=10)
+    print topic_words
         #vectors = vectorizer.fit_transform(corpus).toarray()
     #words = vectorizer.get_feature_names()
 
