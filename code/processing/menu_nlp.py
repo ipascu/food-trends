@@ -10,6 +10,11 @@ import cPickle as pkl
 import os.path
 import numpy as np
 
+ADDITIONAL_STOPWORDS = ['sample', 'menu', 'available', 'popular', 'served', 'contains', 'like', 
+    'items', 'plus', 'participating', 'restaurant', 'restaurants', 'good', 'delicious',
+    'tasty', 'variety', 'perfect', ]
+STOPWORDS = set(stopwords.words('english') + ADDITIONAL_STOPWORDS)
+
 def create_menu_corpus(filename):
     '''
     Extracts menu data from the foursquare mongoDB to create a corpus.
@@ -94,10 +99,10 @@ if __name__ == '__main__':
     with open(corpus_pkl_file) as f:
         corpus = pkl.load(f)
 
-    n_topics = 75
-    n_features = 10000
-    vect = TfidfVectorizer(stop_words='english', ngram_range=(1,3), 
-        max_df=0.4, max_features=n_features)
+    n_topics = 50
+    n_features = 5000
+    vect = TfidfVectorizer(stop_words=STOPWORDS, ngram_range=(1,3), 
+        max_df=0.3, max_features=n_features)
     print 'building the vectorizer...'
     tfidf = vect.fit_transform(corpus)
     feature_words = vect.get_feature_names()    
@@ -109,7 +114,7 @@ if __name__ == '__main__':
     with open(H_pkl_file, 'w') as f:
         pkl.dump(H, f)
 
-    topic_words = topic_words(feature_words, H, n_top_words=10)
+    topic_words = topic_words(feature_words, H, n_top_words=20)
     print topic_words
         #vectors = vectorizer.fit_transform(corpus).toarray()
     #words = vectorizer.get_feature_names()
