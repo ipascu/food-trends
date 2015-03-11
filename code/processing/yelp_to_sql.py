@@ -80,7 +80,6 @@ if __name__ == '__main__':
 	make_reviews_table()
 
 	# query mongo and insert restaurants into postgres
-	r = coll.find_one({}, {'reviews':0})
 	restaurants = coll.find()
 	for r in restaurants:
 		print "inserting: ", r['name'].encode('ascii', 'ignore')
@@ -88,7 +87,6 @@ if __name__ == '__main__':
 		insert_reviews(r)
 		# make changes to the database persistent
 		conn.commit()
-
 
 	# close communications with the database
 	c.close()
