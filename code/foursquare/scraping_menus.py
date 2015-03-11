@@ -1,6 +1,5 @@
 import foursquare
-from pymongo import MongoClient
-from pymongo import errors
+from pymongo import MongoClient, errors
 import time
 
 mongoclient = MongoClient()
@@ -8,20 +7,23 @@ mongoclient = MongoClient()
 DB_NAME = 'foursquare'
 TABLE_NAME = 'venues'
 
-client_id='XXXX'
-client_secret='XXXX' 
+with open('../keys/foursquare.txt') as f:
+    CLIENT_ID, CLIENT_SECRET = f.read().split(',')
 
 class GetFoursquare(object):
     def __init__(self, database, table_name):
-        self.fsqclient = foursquare.Foursquare(client_id=client_id, client_secret=client_secret)
+        self.fsqclient = foursquare.Foursquare(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
         self.database = mongoclient[database]
         self.table = self.database[table_name]
         self.params = {}
 
     def make_params(self, ll='', near='', query='', limit=50, intent='browse', 
-        categoryId='4d4b7105d754a06374d81259', radius=250):
-        # categoryId https://developer.foursquare.com/categorytree
-        # food - 4d4b7105d754a06374d81259
+        categoryId='4d4b7105d754a06374d81259', radius=250): 
+        """ 
+        INPUT: search parameters for the foursquare API
+               Source for categoryId: https://developer.foursquare.com/categorytree
+        OUTPUT: dictionary of parameters.
+        """
         self.params={}
         self.params={'query': query,
                     'limit': limit, 
@@ -34,7 +36,9 @@ class GetFoursquare(object):
             self.params['near'] = near 
 
     def run_search(self):
-        """Using the search terms and API keys, connect and get from FourSquare API"""
+        """
+        Using the search terms and API keys, connect and get list of venues from FourSquare API
+        """
         response = self.fsqclient.venues.search(params=self.params)
         print 'Total number of venues ', len(response['venues'])
         for venue in response['venues']:
@@ -46,15 +50,13 @@ class GetFoursquare(object):
         """
         if not self.table.find_one({"id": venue["id"]}):
             for field, val in venue.iteritems():
-                if type(val) == str:
-                    venue[field] = val.encode('utf-8', 'ignore')
+                if isinstance(val, basestring):
+                    venue[field] = val.encode('ascii', 'ignore')
             try:
-                print "Inserting restaurant " + venue["name"]
+                print "Inserting restaurant id: %s, name: %s" % (venue["id"], venue["name"])
                 self.table.insert(venue)
             except errors.DuplicateKeyError:
                 print "Duplicates"
-            except:
-                print "Other error"
         else:
             print "In collection already"
 
@@ -76,30 +78,37 @@ class GetFoursquare(object):
                 print counter
                 time.sleep(1500)
 
-    def populate_venues(self, location_list):
-        ''' use a location list to query foursquare and populate a MongoDB database '''
-        for loc in location_list[11::15]:
-            self.make_params(ll=loc, radius=400, intent='browse', query='restaurant')
+    def populate_venues(self, location_list, radius=250, intent='search', query=''):
+        """ 
+        Use a location list (lat,long) to query foursquare and populate a MongoDB database 
+        """
+        for loc in location_list[::250]:
+            self.make_params(ll=loc, radius=radius, intent=intent, query=query)
             self.run_search()
 
     def city_start(self, city='San Francisco', radius=500):
-        '''
+        """
         Explore an entire city. Useful for getting an initial
         set of locations in a new city.
-        '''
+        """
         self.make_params(intent='explore', query='restaurant', near=city, radius=radius)
         self.run_search()
 
-def get_locations(city='San Francisco'):
-    coll = mongoclient.foursquare.venues
-    r = coll.find({'location.city':city}, {'_id':0, 'location.lat':1, 'location.lng':1})
-    return [(rest['location']['lat'], rest['location']['lng']) for rest in r]
+    def get_locations(self, city='San Francisco'):
+        """
+        Get list of locations to query for more venues from the locations in the database.
+        Can also use an external source or a grid of lat, long for each city.
+        """
+        r = self.table.find({'location.city':city}, {'_id':0, 'location.lat':1, 'location.lng':1})
+        return [(rest['location']['lat'], rest['location']['lng']) for rest in r]
 
 if __name__ == '__main__':
-    # ['Chicago', 'San Francisco', 'Austin', 'New York', 'Los Angeles']
-    cities = ['Philadelphia', 'Chicago', 'San Francisco']
+    cities = ['Portland', 'Seattle', 'Los Angeles', 'Madison', 'Denver', 'Miami', 
+        'Phoenix', 'Houston', 'San Diego', 'Atlanta', 'Austin', 'Philadelphia',
+        'Chicago', 'San Francisco', 'Cambridge', 'Boston']
     fsq = GetFoursquare(DB_NAME, TABLE_NAME)
+    
     for city in cities:
-        fsq.city_start(city, radius=5000)
-        fsq.populate_venues(get_locations(city))
+        fsq.city_start(city, radius=7500)
+        fsq.populate_venues(fsq.get_locations(city))
     fsq.get_menu_info()
