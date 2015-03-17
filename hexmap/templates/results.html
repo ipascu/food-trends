@@ -5,19 +5,19 @@
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+<link href="../static/css/light-theme.css" rel="stylesheet" >
 <script src="../static/js/d3.min.js"></script>
 <script src="../static/js/hexbin.js"></script>
 <script src="../static/js/simple_statistics.js"></script>
 
 <style>
-    text {
-        fill: white;
-    }
-    html, body, #map {
-      position: relative;
+      html, body, #map {
+      position: right;
       height: 100%;
       padding: 0;
       margin: 0;
+    }
+
     }
     #tooltip {
         opacity: .9;
@@ -25,33 +25,59 @@
         padding: 5px;
         border: 1px solid lightgrey;
         border-radius: 5px;
-        position: absolute;
+        position: relative;
         z-index: 10;
         visibility: hidden;
         pointer-events: none;
     }
-
-    #wordlist {
-      font: 18px "Helvetica Neue";
-      height: 60px;
-      width: 400px;
-      display:block;
-      float:right;
-
+    #searchbox {
+        font: 18px "Helvetica Neue";
+    }
     }
 </style>
 </head>
 <body>
-<form action="/results" method="POST">
-    Search Term:<input type="text" name="search_term">
+
+<div id='map'></div>
+
+<div class="sidepanel">
+      <div class="wrapper">
+
+    <h1>Explore San Francisco</h1>
+<form id="searchbox" action="/results" method="POST">
+    Search: <input type="text" name="search_term">
     <input type="submit" value="Submit">
 </form>
-  <p id='wordlist'> Search term: {{words[0]}} <br>
-      Similar words:
-        {% for word in words[1:] %}
-        {{word}} 
-      {% endfor %}  </p>
-<div id='map'></div>
+<p> The search term should be a single word. Examples: "hipster", "truck", "enchilada". </p>
+
+    <p id="reviews"> {{ (mean_val * 100) | round(1, 'floor') }} percent of reviews contain related words.  
+    </p>
+
+    <p id="searchterm"> Search term: {{words[0]}} </p>
+    <p id="wordlist"> Similar words:
+                {% for word in words[1:] %}
+                {{word}} 
+                {% endfor %}  
+        </p>
+
+   
+    <p>The size of the hexagon is proportional to the total number of reviews in the area. <br>Red hexagons have a higher share of reviews that mention the search term or one of the related words.</p>
+
+<p><span class="bold" style="font-weight: bold; font-size:15px"></p>
+
+  
+
+<div class="context footer">
+<p>
+See the <a href="http://github.com/ipascu/food-trends" target="_top"> GitHub repo with the code here </a></p>
+
+<p>Map created by <a href="http://www.linkedin.com/in/ipascu" target="_top">Iuliana Pascu</a> as a <a href="http://www.zipfianacademy.com/" target="_top"> Zipfian Academy @ gSchool Project</a></p>
+
+<p>Powered by <a href="http://d3js.org/" target="_top">D3</a>, <a href="http://leafletjs.com/" target="_top">Leaflet</a> and <a href="https://www.mapbox.com/" target="_top"> MapBox</a></p>
+</div>   
+
+
+
 <div id="tooltip">
     <svg width="100px" height="100px"></svg>
 </div>
@@ -159,7 +185,7 @@
 
     L.mapbox.accessToken = 'pk.eyJ1Ijoianl0MTA5IiwiYSI6InJQMVJDUlkifQ.m9cuFCP-4usVG2qFFWgWOQ';
     var map = L.mapbox.map('map', 'zeira.ldg6ocae', {minZoom: 12, maxZoom: 16})
-        .setView([37.7697, -122.4376], 13);
+        .setView([37.7697, -122.4176], 13);
 
     //Get the data from the backend
     d3.csv('{{ file_path | safe}}', function(error, raw_data){

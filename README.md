@@ -3,7 +3,8 @@
 #### Iuliana Pascu, March 2015
 
 ### Overview
-Website is live at word2maps.com.
+
+Website is live at [Word2Maps](http://www.word2maps.com Word2Maps).
 
 ### Dataset
 The word2vec model for this project was trained on 1.5 million Yelp restaurant reviews from San Francisco. This includes the entire history of reviews, ### restaurants.

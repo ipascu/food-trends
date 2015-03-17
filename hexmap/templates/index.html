@@ -1,51 +1,98 @@
 <html>
 <head>
 <meta charset=utf-8 />
-<title>A simple map</title>
+<title>Mapping Food Topics</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+<link href="../static/css/light-theme.css" rel="stylesheet" >
 <script src="../static/js/d3.min.js"></script>
 <script src="../static/js/hexbin.js"></script>
 <script src="../static/js/simple_statistics.js"></script>
 
 <style>
-    text {
-        fill: white;
+      html, body, #map {
+      position: right;
+      height: 100%;
+      padding: 0;
+      margin: 0;
     }
-    #map {
-        margin: 100px;
-        background-color: #333;
-        width: 60%;
-        height: 600px;
-    }
+
     #tooltip {
         opacity: .9;
         background: #333;
         padding: 5px;
         border: 1px solid lightgrey;
         border-radius: 5px;
-        position: absolute;
+        position: relative;
         z-index: 10;
         visibility: hidden;
         pointer-events: none;
     }
+    #searchbox {
+        font: 18px "Helvetica Neue";
+    }
+    }
 </style>
 </head>
 <body>
-<form action="/results" method="POST">
-    Search Term:<input type="text" name="search_term">
-    <input type="submit" value="Submit">
-</form>
+   
+
 <div id='map'></div>
-<div id="tooltip">
-    <svg width="100px" height="100px"></svg>
+
+<div class="sidepanel">
+      <div class="wrapper">
+
+    <h1>Explore San Francisco</h1>
+         
+    <form id="searchbox" action="/results" method="POST">
+        Search: <input type="text" name="search_term">
+        <input type="submit" value="Submit">
+    </form>
+    <p> The search term should be a single word. Examples: "hipster", "truck", "enchilada". </p>
+
+<p><span style="font-weight: bold; font-size:15px"></p>
+
+<p><span class="bold" style="font-weight: bold; font-size:15px"></p>
+
+<p>
+This project uses text from restaurant reviews in San Francisco to create visualizations that allow the user to explore and learn about the city.
+</p>
+
+<p>
+The query vocabulary uses the search term and a set of related words constructed using cosine similarity of the word vectors from <a href="https://code.google.com/p/word2vec/" target="_top"> word2vec </a>. The model was trained using 1.5 million restaurant reviews using <a href="http://radimrehurek.com/gensim/index.html" target="_top"> gensim </a>.
+</p>
+
+<p> <span style="color: gray">
+Note: Because the word2vec model relies on word co-ocurrences for training it can easily find misspellings, synonyms, or word groups that form cuisines. It will not work as well with more general terms describing a cuisine, for example, "italian". Sometimes it might pick up antonyms because they tend to occur in a similar way in sentences. This is a bug and a feature, it allows one to explore and understand the vector space of word embeddings from the reviews created by word2vec.
+</p>
+
+<p> 
+The maps are built using word counts from reviews in December 2014.
+</p>
+
+
+   
+
+
+    </div>
+  </div>
 </div>
+
+<div class="context footer">
+<p>
+See the <a href="http://github.com/ipascu/food-trends" target="_top"> GitHub repo with the code here </a></p>
+
+<p>Map created by <a href="http://www.linkedin.com/in/ipascu" target="_top">Iuliana Pascu</a> as a <a href="http://www.zipfianacademy.com/" target="_top"> Zipfian Academy @ gSchool Project</a></p>
+
+<p>Powered by <a href="http://d3js.org/" target="_top">D3</a>, <a href="http://leafletjs.com/" target="_top">Leaflet</a> and <a href="https://www.mapbox.com/" target="_top"> MapBox</a></p>
+</div>
+
 </body>
 
 <script>
     L.mapbox.accessToken = 'pk.eyJ1Ijoianl0MTA5IiwiYSI6InJQMVJDUlkifQ.m9cuFCP-4usVG2qFFWgWOQ';
     var map = L.mapbox.map('map', 'zeira.ldg6ocae', {minZoom: 12, maxZoom: 16})
-        .setView([37.7697, -122.4376], 13);
+        .setView([37.7697, -122.4176], 13);
 </script>
 </html>
