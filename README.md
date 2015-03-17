@@ -16,14 +16,14 @@ The maps were created using reviews from 12/01/2014 - 12/31/2014.
 #### Hexbin Maps
 
 ### Examples
-
+![Alt text](/examples/view.jpg)
 
 ### Project Pipeline
 
 Yelp Data collections
 Use calls to the Yelp API to collect restaurant meta data for approximately 8000 restaurants in the San Francisco area. Store the data in MongoDB.
 
-Using restaurant urls scrape restaurant reviews. 
+Using restaurant urls scrape restaurant reviews.
 
 Rebuild the database in SQL in a time-series format. Relations in the database are:
 
@@ -35,7 +35,7 @@ Parse one month of reviews, build word counts.
 
 #### Add the time dimension
 #### Include bi-grams in the model
-#### 
+####
 
 
 
@@ -50,4 +50,3 @@ Foursquare API menu data collection - calls to the API for restaurant meta data,
 Creating a corpus from the menu information and NMF on this corpus to construct food topics.
 
 Query to construct SQL time-series.
-
