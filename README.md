@@ -15,11 +15,21 @@ The maps were created using reviews from 12/01/2014 - 12/31/2014.
 #### CountVectorizer
 #### Hexbin Maps
 
-### Analysis Choices and Details
-
-
 ### Examples
 
+
+### Project Pipeline
+
+Yelp Data collections
+Use calls to the Yelp API to collect restaurant meta data for approximately 8000 restaurants in the San Francisco area. Store the data in MongoDB.
+
+Using restaurant urls scrape restaurant reviews. 
+
+Rebuild the database in SQL in a time-series format. Relations in the database are:
+
+Train word2vec model on the restaurant reviews using the gensim package.
+
+Parse one month of reviews, build word counts.
 
 ### Next Steps
 
