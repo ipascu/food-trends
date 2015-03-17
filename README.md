@@ -16,7 +16,8 @@ The maps were created using reviews from 12/01/2014 - 12/31/2014.
 #### Hexbin Maps
 
 ### Examples
-![Alt text](/examples/view.jpg)
+#### Query: view
+![Alt text](/examples/view2.jpg)
 
 ### Project Pipeline
 
