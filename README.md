@@ -1,4 +1,34 @@
-# restaurant-project
+##Mapping food topics in San Francisco
+
+#### Iuliana Pascu, March 2015
+
+### Overview
+Website is live at word2maps.com.
+
+### Dataset
+The word2vec model for this project was trained on 1.5 million Yelp restaurant reviews from San Francisco. This includes the entire history of reviews, ### restaurants.
+
+The maps were created using reviews from 12/01/2014 - 12/31/2014.
+
+### Modeling
+#### Word2Vec
+#### CountVectorizer
+#### Hexbin Maps
+
+### Analysis Choices and Details
+
+
+### Examples
+
+
+### Next Steps
+
+#### Add the time dimension
+#### Include bi-grams in the model
+#### 
+
+
+
 Work in progress for capstone project.
 
 Code done so far:
