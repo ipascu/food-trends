@@ -33,7 +33,7 @@ def index():
 
 @app.route('/results', methods=['POST', 'GET'])
 def results():
-    search_term = request.form['search_term']
+    search_term = request.form['search_term'].lower()
     print search_term
     data = query_term(search_term)
     words = cluster(search_term)
@@ -45,6 +45,14 @@ def results():
     file_path = url_for('static', filename='data/%s.csv' % search_term)
     return render_template('results.html', file_path=file_path, mean_val=mean, words=words)
 
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('error_page.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('error_page.html'), 500
+
 if __name__ == '__main__':
     app.model = run_on_start()
-    app.run(port=80, host='0.0.0.0', debug=True)
+    app.run(port=80, host='0.0.0.0')

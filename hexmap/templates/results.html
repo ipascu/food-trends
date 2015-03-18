@@ -48,13 +48,12 @@
     Search: <input type="text" name="search_term">
     <input type="submit" value="Submit">
 </form>
-<p> The search term should be a single word. Examples: "hipster", "truck", "enchilada". </p>
+<p><span style="font-size:12px"> The search term should be a single word. Examples: "hipster", "truck", "enchilada". </p>
 
-    <p id="reviews"> {{ (mean_val * 100) | round(1, 'floor') }} percent of reviews contain related words.  
-    </p>
+    
 
-    <p id="searchterm"> Search term: {{words[0]}} </p>
-    <p id="wordlist"> Similar words:
+    <p id="searchterm"><span class="bold" style="font-weight: bold; font-size:15px"> Search term: {{words[0]}} </p>
+    <p id="wordlist"> <span class="bold" style="font-weight: bold; font-size:13px"> Related terms:
                 {% for word in words[1:] %}
                 {{word}} 
                 {% endfor %}  
@@ -65,15 +64,15 @@
 
 <p><span class="bold" style="font-weight: bold; font-size:15px"></p>
 
-  
+<p id="reviews"> {{ (mean_val * 100) | round(1, 'floor') }} percent of reviews contain related words.</p>
 
 <div class="context footer">
 <p>
-See the <a href="http://github.com/ipascu/food-trends" target="_top"> GitHub repo with the code here </a></p>
+See the <a href="http://github.com/ipascu/food-trends" target="_blank"> GitHub repo with the code here </a></p>
 
-<p>Map created by <a href="http://www.linkedin.com/in/ipascu" target="_top">Iuliana Pascu</a> as a <a href="http://www.zipfianacademy.com/" target="_top"> Zipfian Academy @ gSchool Project</a></p>
+<p>Map created by <a href="http://www.linkedin.com/in/ipascu" target="_blank">Iuliana Pascu</a> as a <a href="http://www.zipfianacademy.com/" target="_blank"> Zipfian Academy @ gSchool Project</a></p>
 
-<p>Powered by <a href="http://d3js.org/" target="_top">D3</a>, <a href="http://leafletjs.com/" target="_top">Leaflet</a> and <a href="https://www.mapbox.com/" target="_top"> MapBox</a></p>
+<p>Powered by <a href="http://d3js.org/" target="_blank">D3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a> and <a href="https://www.mapbox.com/" target="_blank"> MapBox</a></p>
 </div>   
 
 

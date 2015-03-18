@@ -22,7 +22,7 @@ Just from the size and density of the hexagon one can easily see where the clust
 ### Dataset
 The word2vec model for this project was trained on approximately 1.5 million Yelp restaurant reviews from San Francisco. This includes the entire history of reviews starting in 2004, 7230 restaurants in the area.
 
-The maps were created using reviews from 12/01/2014 - 12/31/2014.
+The maps were created using only reviews from December 2014 for faster rendering.
 
 ### Modeling
 #### Word2Vec
