@@ -8,7 +8,7 @@ The app is live at [Word2Maps](http://www.word2maps.com Word2Maps).
 
 The idea of this project is to allow a user, or data scientist, to explore and learn about a city from the text of Yelp restaurant reviews. My goal was to structure this data and help users extract insights about the local restaurant market. The user can use the search app to run their own queries and learn about San Francisco.
 
-### Example Map
+### Example
 
 The maps are built using terms extracted from San Francisco Yelp restaurant reviews from December 2014. The size of the hexagons is proportional to the number of reviews in the area and gives a representation of the density of restaurant activity. The colors indicate the share of the reviews in that cell that contain the search term or words related to it.
 
@@ -45,7 +45,7 @@ Because adjectives with opposite meaning show up in similar contexts the model c
 - construct related word groups based on cosine similarity
 - hexbin map
 
-#### Future Steps
+### Future Steps
 I think this project has a lot of future potential for development. A few directions that would be fun to explore are:
 2. Visualize changes in the maps over time -- can we create a visualization of the major transformations San Francisco has gone through with the information extracted from these reviews?
 - Add information about the restaurants with a high number of reviews matching the search term in the search page -- the model can extract information about cases of food poisoning, health department violations, etc.
