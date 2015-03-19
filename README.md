@@ -62,6 +62,6 @@ I think this project has a lot of future potential for development. A few direct
 - pandas
 
 ### Background Resources
-- [word2vec](https://code.google.com/p/word2vec/)
+- [word2vec](https://code.google.com/p/word2vec/), [technical details](https://docs.google.com/file/d/0B7XkCwpI5KDYRWRnd1RzWXQ2TWc/edit)
 - [hexbin maps](http://www.delimited.io/blog/2013/12/1/hexbins-with-d3-and-leaflet-maps)
 - [Yelp API](https://www.yelp.com/developers/documentation)
