@@ -8,12 +8,12 @@ The app is live at [Word2Maps](http://www.word2maps.com Word2Maps).
 
 The idea of this project is to allow a user, or data scientist, to explore and learn about a city from the text of Yelp restaurant reviews. My goal was to structure this data and help users extract insights about the local restaurant market. The user can use the search app to run their own queries and learn about San Francisco.
 
-### Examples
+### Example Map
 
 The maps are built using terms extracted from San Francisco Yelp restaurant reviews from December 2014. The size of the hexagons is proportional to the number of reviews in the area and gives a representation of the density of restaurant activity. The colors indicate the share of the reviews in that cell that contain the search term or words related to it.
 
-RED is a higher share of reviews containing the relevant terms.  
-SIZE is the total number of reviews and does not change between searches.
+RED represents a higher share of reviews containing the relevant terms.  
+SIZE represents the total number of reviews and does not change between searches.
 
 ##### Example query: hipster
 ![Alt text](/examples/hipster.jpg)
@@ -31,7 +31,7 @@ Searching for "dirty" extracts the following terms: "dusty", "unclean", "filthy"
 
 Reviews were transformed into a matrix of word counts that is filtered according to the search terms. This process is fast and allows for a good user experience when interacting with the website. The results are aggregated using [hexbin](http://www.delimited.io/blog/2013/12/1/hexbins-with-d3-and-leaflet-maps) maps.
 
-The maps display only reviews from December 2014 for faster rendering. 
+The maps display only reviews from December 2014 for faster rendering.
 
 ##### Caveats:  
 Because adjectives with opposite meaning show up in similar contexts the model can sometimes pull both of them as a similar topic. Example: a search for "small" will pull "large", "small-ish", "dinky" and "tiny" as related terms. Training on a larger training set can fix some of these problems. Right now this is a tool for also understanding how word2vec works for this body of text.
