@@ -6,14 +6,14 @@
 
 The app is live at [Word2Maps](http://www.word2maps.com Word2Maps).  
 
-The idea of this project is to allow a user, or data scientist, to explore and learn about a city from the text of Yelp restaurant reviews. My goal was to structure this data and help users extract insights about the local restaurant market. The user can use the search app to run their own queries and learn about San Francisco.
+The idea of this project is to allow a user, or data scientist, to explore and learn about a city from the text and volume of Yelp restaurant reviews. My goal was to structure this data and help users extract insights about the local restaurant market.
 
 ### Example
 
 The maps are built using terms extracted from San Francisco Yelp restaurant reviews from December 2014. The size of the hexagons is proportional to the number of reviews in the area and gives a representation of the density of restaurant activity. The colors indicate the share of the reviews in that cell that contain the search term or words related to it.
 
-RED represents a higher share of reviews containing the relevant terms.  
-SIZE represents the total number of reviews and does not change between searches.
+The GREEN-RED color scale goes from a very low to a very high share of reviews in that hex-cell containing the relevant terms.
+SIZE is proportional to the total number of reviews and does not change between searches.
 
 ##### Example query: hipster
 ![Alt text](/examples/hipster.jpg)
